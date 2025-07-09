@@ -190,22 +190,26 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				local hp = UnitHealth(unit)
 				local maxHp = UnitHealthMax(unit)
 				local Their_hp_percent = hp / maxHp * 100
-				local spellName = UnitCastingInfo("player")
-				local manaCost = GetSpellPowerCost("Holy Light")[1].cost
-				print(spellName .. "/" .. manaCost)
-				if Their_hp_percent < currentlowesthp and UnitPower("player", 0) >= manaCost then
-					currentlowesthp = Their_hp_percent
-					if Their_hp_percent < selectedValue and spellName ~= "Holy Light" then
-						if unit == "player" then
-							box.texture:SetColorTexture(1, 0, 0, 1)
-						elseif unit == "party1" then
-							box.texture:SetColorTexture(0.5, 0.5, 0.5, 1)
-						elseif unit == "party2" then
-							box.texture:SetColorTexture(0, 0, 1, 1)
-						elseif unit == "party3" then
-							box.texture:SetColorTexture(1, 0, 1, 1)
-						elseif unit == "party4" then
-							box.texture:SetColorTexture(0, 1, 1, 1)
+				local _, class = UnitClass("player")
+
+				if class == "PALADIN" then
+					local spellName = UnitCastingInfo("player")
+					local manaCost = GetSpellPowerCost("Holy Light")[1].cost
+					print(spellName .. "/" .. manaCost)
+					if Their_hp_percent < currentlowesthp and UnitPower("player", 0) >= manaCost then
+						currentlowesthp = Their_hp_percent
+						if Their_hp_percent < selectedValue and spellName ~= "Holy Light" then
+							if unit == "player" then
+								box.texture:SetColorTexture(1, 0, 0, 1)
+							elseif unit == "party1" then
+								box.texture:SetColorTexture(0.5, 0.5, 0.5, 1)
+							elseif unit == "party2" then
+								box.texture:SetColorTexture(0, 0, 1, 1)
+							elseif unit == "party3" then
+								box.texture:SetColorTexture(1, 0, 1, 1)
+							elseif unit == "party4" then
+								box.texture:SetColorTexture(0, 1, 1, 1)
+							end
 						end
 					end
 				end
@@ -214,11 +218,11 @@ f:SetScript("OnUpdate", function(self, elapsed)
 	end
 end)
 
-local f = CreateFrame("Frame")
-f:RegisterEvent("AUTOFOLLOW_BEGIN")
-f:RegisterEvent("AUTOFOLLOW_END")
+local eventFrame = CreateFrame("Frame")
+eventFrame:RegisterEvent("AUTOFOLLOW_BEGIN")
+eventFrame:RegisterEvent("AUTOFOLLOW_END")
 
-f:SetScript("OnEvent", function(self, event, msg)
+eventFrame:SetScript("OnEvent", function(self, event, msg)
 	if event == "AUTOFOLLOW_BEGIN" then
 		followTarget = true
 		print("Now following: " .. (msg or "unknown"))

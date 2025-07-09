@@ -192,7 +192,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				local Their_hp_percent = hp / maxHp * 100
 				local spellName = UnitCastingInfo("player")
 				local manaCost = GetSpellPowerCost("Holy Light")[1].cost
-
+                print(spellName ... "/" ... manaCost)
 				if Their_hp_percent < currentlowesthp and if UnitPower("player", 0) >= manaCost then
 					currentlowesthp = Their_hp_percent
 					if Their_hp_percent < selectedValue and spellName ~= "Holy Light" then

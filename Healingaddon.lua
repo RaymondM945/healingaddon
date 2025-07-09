@@ -172,7 +172,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				print("You are not auto-attacking.")
 				box.texture:SetColorTexture(0, 1, 0, 1)
 			elseif not sametarget and canAttack then
-				box1.texture:SetColorTexture(0, 0.5, 0.5, 1)
+				box.texture:SetColorTexture(0, 0.5, 0.5, 1)
 			else
 				print("You are auto-attacking.")
 			end
@@ -192,8 +192,8 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				local Their_hp_percent = hp / maxHp * 100
 				local spellName = UnitCastingInfo("player")
 				local manaCost = GetSpellPowerCost("Holy Light")[1].cost
-                print(spellName ... "/" ... manaCost)
-				if Their_hp_percent < currentlowesthp and if UnitPower("player", 0) >= manaCost then
+				print(spellName .. "/" .. manaCost)
+				if Their_hp_percent < currentlowesthp and UnitPower("player", 0) >= manaCost then
 					currentlowesthp = Their_hp_percent
 					if Their_hp_percent < selectedValue and spellName ~= "Holy Light" then
 						if unit == "player" then

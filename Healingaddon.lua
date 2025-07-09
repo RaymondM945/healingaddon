@@ -111,7 +111,7 @@ local function InitializeDropdown2(self, level)
 	info.minWidth = 120
 	info.func = function(self)
 		playerincombat = self.value
-		UIDropDownMenu_SetSelectedValue(dropdown, playerincombat)
+		UIDropDownMenu_SetSelectedValue(dropdown2, playerincombat)
 		print("Selected:", playerincombat)
 	end
 	UIDropDownMenu_AddButton(info, level)
@@ -122,7 +122,7 @@ local function InitializeDropdown2(self, level)
 	info2.minWidth = 120
 	info2.func = function(self)
 		playerincombat = self.value
-		UIDropDownMenu_SetSelectedValue(dropdown, playerincombat)
+		UIDropDownMenu_SetSelectedValue(dropdown2, playerincombat)
 		print("Selected:", playerincombat)
 	end
 	UIDropDownMenu_AddButton(info2, level)
@@ -133,7 +133,7 @@ local function InitializeDropdown2(self, level)
 	info3.minWidth = 120
 	info3.func = function(self)
 		playerincombat = self.value
-		UIDropDownMenu_SetSelectedValue(dropdown, playerincombat)
+		UIDropDownMenu_SetSelectedValue(dropdown2, playerincombat)
 		print("Selected:", playerincombat)
 	end
 	UIDropDownMenu_AddButton(info3, level)
@@ -144,7 +144,7 @@ local function InitializeDropdown2(self, level)
 	info4.minWidth = 120
 	info4.func = function(self)
 		playerincombat = self.value
-		UIDropDownMenu_SetSelectedValue(dropdown, playerincombat)
+		UIDropDownMenu_SetSelectedValue(dropdown2, playerincombat)
 		print("Selected:", playerincombat)
 	end
 	UIDropDownMenu_AddButton(info4, level)
@@ -163,12 +163,13 @@ f:SetScript("OnUpdate", function(self, elapsed)
 	box.texture:SetColorTexture(0, 0, 0, 1)
 	if IsInGroup() then
 		if UnitAffectingCombat(playerincombat) then
+			box.texture:SetColorTexture(1, 1, 0, 1)
 			print("party is in combat")
 			if not followTarget and canFollow then
 				box.texture:SetColorTexture(1, 1, 1, 1)
 			elseif not (IsCurrentSpell("Attack") or IsCurrentSpell("Shoot")) and canAttack then
 				print("You are not auto-attacking.")
-				box.texture:SetColorTexture(1, 1, 0, 1)
+				box.texture:SetColorTexture(0, 1, 0, 1)
 			else
 				print("You are auto-attacking.")
 			end
@@ -193,7 +194,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 						if unit == "player" then
 							box.texture:SetColorTexture(1, 0, 0, 1)
 						elseif unit == "party1" then
-							box.texture:SetColorTexture(0, 1, 0, 1)
+							box.texture:SetColorTexture(0.5, 0.5, 0.5, 1)
 						elseif unit == "party2" then
 							box.texture:SetColorTexture(0, 0, 1, 1)
 						elseif unit == "party3" then

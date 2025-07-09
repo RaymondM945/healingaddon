@@ -13,6 +13,8 @@ local selectedValue = 90
 local canFollow = true
 local canAttack = true
 local playerincombat = "party1"
+local holylightpercent = "50"
+local canholylight = true
 local function InitializeDropdown(self, level)
 	local info = UIDropDownMenu_CreateInfo()
 	info.text = "90"
@@ -63,7 +65,7 @@ UIDropDownMenu_Initialize(dropdown, InitializeDropdown)
 UIDropDownMenu_SetWidth(dropdown, 120)
 UIDropDownMenu_SetButtonWidth(dropdown, 180)
 UIDropDownMenu_SetSelectedValue(dropdown, selectedValue)
-UIDropDownMenu_SetText(dropdown, "Pick percentage")
+UIDropDownMenu_SetText(dropdown, "Pick begin percentage")
 UIDropDownMenu_JustifyText(dropdown, "LEFT")
 
 local checkbox = CreateFrame("CheckButton", "MyCheckbox", UIParent, "ChatConfigCheckButtonTemplate")
@@ -157,22 +159,63 @@ UIDropDownMenu_SetSelectedValue(dropdown2, playerincombat)
 UIDropDownMenu_SetText(dropdown2, "Pick party")
 UIDropDownMenu_JustifyText(dropdown2, "LEFT")
 
+local dropdown3 = CreateFrame("Frame", "MySingleOptionDropdown3", UIParent, "UIDropDownMenuTemplate")
+dropdown3:SetPoint("TOP", UIParent, "TOP", 0, -105)
+local function InitializeDropdown3(self, level)
+	local roles = { "90", "80", "70", "60", "50", "40" }
+	for _, role in ipairs(roles) do
+		local info = UIDropDownMenu_CreateInfo()
+		info.text = role
+		info.value = role
+		info.minWidth = 120
+		info.func = function(self)
+			holylightpercent = self.value
+			UIDropDownMenu_SetSelectedValue(dropdown3, holylightpercent)
+			print("Holy Light threshold:", holylightpercent)
+		end
+		UIDropDownMenu_AddButton(info, level)
+	end
+end
+UIDropDownMenu_Initialize(dropdown3, InitializeDropdown3)
+UIDropDownMenu_SetWidth(dropdown3, 120)
+UIDropDownMenu_SetButtonWidth(dropdown3, 180)
+UIDropDownMenu_SetSelectedValue(dropdown3, holylightpercent)
+UIDropDownMenu_SetText(dropdown3, "Pick  Holy Light percentage")
+UIDropDownMenu_JustifyText(dropdown3, "LEFT")
+
+local checkbox3 = CreateFrame("CheckButton", "MyCheckbox3", UIParent, "ChatConfigCheckButtonTemplate")
+checkbox3:SetPoint("TOP", UIParent, "TOP", -50, -130)
+checkbox3:SetSize(24, 24)
+MyCheckbox3Text:SetText("Can cast Holy Light")
+
+checkbox3:SetChecked(canholylight)
+
+checkbox3:SetScript("OnClick", function(self)
+	if self:GetChecked() then
+		print("Heal checkbox enabled!")
+		canholylight = true
+	else
+		print("Heal checkbox disabled!")
+		canholylight = false
+	end
+end)
+
 local f = CreateFrame("Frame")
 f:SetScript("OnUpdate", function(self, elapsed)
 	local currentlowesthp = 100
 	box.texture:SetColorTexture(0, 0, 0, 1)
 	if IsInGroup() then
 		if UnitAffectingCombat(playerincombat) then
-			box.texture:SetColorTexture(1, 1, 0, 1)
+			box.texture:SetColorTexture(0.5, 0.5, 1, 1)
 
 			local sametarget = UnitIsUnit("target", playerincombat .. "target")
 			if not followTarget and canFollow then
-				box.texture:SetColorTexture(1, 1, 1, 1)
-			elseif not (IsCurrentSpell("Attack") or IsCurrentSpell("Shoot")) and canAttack then
-				print("You are not auto-attacking.")
-				box.texture:SetColorTexture(0, 1, 0, 1)
-			elseif not sametarget and canAttack then
 				box.texture:SetColorTexture(0, 0.5, 0.5, 1)
+			elseif not (IsCurrentSpell("Attack")) and canAttack then
+				print("You are not auto-attacking.")
+				box.texture:SetColorTexture(1, 0.5, 0, 1)
+			elseif not sametarget and canAttack then
+				box.texture:SetColorTexture(0, 0.5, 1, 1)
 			else
 				print("You are auto-attacking.")
 			end
@@ -195,21 +238,39 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				if class == "PALADIN" then
 					local spellName = UnitCastingInfo("player")
 
-					local usable, nomana = IsUsableSpell("Holy Light")
 					local mana = UnitPower("player", 0)
 					if Their_hp_percent < currentlowesthp and mana ~= 0 then
 						currentlowesthp = Their_hp_percent
-						if Their_hp_percent < selectedValue and spellName ~= "Holy Light" and usable then
-							if unit == "player" then
-								box.texture:SetColorTexture(1, 0, 0, 1)
-							elseif unit == "party1" then
-								box.texture:SetColorTexture(0.5, 0.5, 0.5, 1)
-							elseif unit == "party2" then
-								box.texture:SetColorTexture(0, 0, 1, 1)
-							elseif unit == "party3" then
-								box.texture:SetColorTexture(1, 0, 1, 1)
-							elseif unit == "party4" then
-								box.texture:SetColorTexture(0, 1, 1, 1)
+
+						if currentlowesthp <= holylightpercent and canholylight then
+							local usable, nomana = IsUsableSpell("Holy Light")
+							if Their_hp_percent < selectedValue and spellName ~= "Holy Light" and usable then
+								if unit == "player" then
+									box.texture:SetColorTexture(1, 0, 0, 1)
+								elseif unit == "party1" then
+									box.texture:SetColorTexture(0, 1, 0, 1)
+								elseif unit == "party2" then
+									box.texture:SetColorTexture(0, 0, 1, 1)
+								elseif unit == "party3" then
+									box.texture:SetColorTexture(1, 1, 1, 1)
+								elseif unit == "party4" then
+									box.texture:SetColorTexture(0, 0, 1, 1)
+								end
+							end
+						else
+							local usable2, nomana2 = IsUsableSpell("Flash of Light")
+							if Their_hp_percent < selectedValue and spellName ~= "Flash of Light" and usable2 then
+								if unit == "player" then
+									box.texture:SetColorTexture(1, 1, 0, 1)
+								elseif unit == "party1" then
+									box.texture:SetColorTexture(0, 1, 1, 1)
+								elseif unit == "party2" then
+									box.texture:SetColorTexture(0.5, 0.5, 0.5, 1)
+								elseif unit == "party3" then
+									box.texture:SetColorTexture(0.5, 0, 0.5, 1)
+								elseif unit == "party4" then
+									box.texture:SetColorTexture(0.5, 0.5, 0, 1)
+								end
 							end
 						end
 					end

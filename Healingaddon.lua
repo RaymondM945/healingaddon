@@ -194,11 +194,12 @@ f:SetScript("OnUpdate", function(self, elapsed)
 
 				if class == "PALADIN" then
 					local spellName = UnitCastingInfo("player")
-					-- local manaCost = GetSpellPowerCost("Holy Light")[1].cost
-					print(spellName)
-					if Their_hp_percent < currentlowesthp then
+
+					local usable, nomana = IsUsableSpell("Holy Light")
+					local mana = UnitPower("player", 0)
+					if Their_hp_percent < currentlowesthp and mana ~= 0 then
 						currentlowesthp = Their_hp_percent
-						if Their_hp_percent < selectedValue and spellName ~= "Holy Light" then
+						if Their_hp_percent < selectedValue and spellName ~= "Holy Light" and usable then
 							if unit == "player" then
 								box.texture:SetColorTexture(1, 0, 0, 1)
 							elseif unit == "party1" then

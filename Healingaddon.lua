@@ -164,12 +164,15 @@ f:SetScript("OnUpdate", function(self, elapsed)
 	if IsInGroup() then
 		if UnitAffectingCombat(playerincombat) then
 			box.texture:SetColorTexture(1, 1, 0, 1)
-			print("party is in combat")
+
+			local sametarget = UnitIsUnit("target", playerincombat .. "target")
 			if not followTarget and canFollow then
 				box.texture:SetColorTexture(1, 1, 1, 1)
 			elseif not (IsCurrentSpell("Attack") or IsCurrentSpell("Shoot")) and canAttack then
 				print("You are not auto-attacking.")
 				box.texture:SetColorTexture(0, 1, 0, 1)
+			elseif not sametarget and canAttack then
+				box1.texture:SetColorTexture(0, 0.5, 0.5, 1)
 			else
 				print("You are auto-attacking.")
 			end
@@ -187,10 +190,12 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				local hp = UnitHealth(unit)
 				local maxHp = UnitHealthMax(unit)
 				local Their_hp_percent = hp / maxHp * 100
+				local spellName = UnitCastingInfo("player")
+				local manaCost = GetSpellPowerCost("Holy Light")[1].cost
 
-				if Their_hp_percent < currentlowesthp then
+				if Their_hp_percent < currentlowesthp and if UnitPower("player", 0) >= manaCost then
 					currentlowesthp = Their_hp_percent
-					if Their_hp_percent < selectedValue then
+					if Their_hp_percent < selectedValue and spellName ~= "Holy Light" then
 						if unit == "player" then
 							box.texture:SetColorTexture(1, 0, 0, 1)
 						elseif unit == "party1" then

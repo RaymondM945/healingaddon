@@ -242,34 +242,39 @@ f:SetScript("OnUpdate", function(self, elapsed)
 					if Their_hp_percent < currentlowesthp and mana ~= 0 then
 						currentlowesthp = Their_hp_percent
 
-						if currentlowesthp <= holylightpercent and canholylight then
-							local usable, nomana = IsUsableSpell("Holy Light")
-							if Their_hp_percent < selectedValue and spellName ~= "Holy Light" and usable then
-								if unit == "player" then
-									box.texture:SetColorTexture(1, 0, 0, 1)
-								elseif unit == "party1" then
-									box.texture:SetColorTexture(0, 1, 0, 1)
-								elseif unit == "party2" then
-									box.texture:SetColorTexture(0, 0, 1, 1)
-								elseif unit == "party3" then
-									box.texture:SetColorTexture(1, 1, 1, 1)
-								elseif unit == "party4" then
-									box.texture:SetColorTexture(0, 0, 1, 1)
+						if Their_hp_percent < selectedValue then
+							if currentlowesthp <= holylightpercent and canholylight then
+								local usable, nomana = IsUsableSpell("Holy Light")
+								if spellName ~= "Holy Light" and usable then
+									if unit == "player" then
+										box.texture:SetColorTexture(1, 0, 0, 1)
+									elseif unit == "party1" then
+										box.texture:SetColorTexture(0, 1, 0, 1)
+									elseif unit == "party2" then
+										box.texture:SetColorTexture(0, 0, 1, 1)
+									elseif unit == "party3" then
+										box.texture:SetColorTexture(1, 1, 1, 1)
+									elseif unit == "party4" then
+										box.texture:SetColorTexture(0, 0, 1, 1)
+									end
 								end
-							end
-						else
-							local usable2, nomana2 = IsUsableSpell("Flash of Light")
-							if Their_hp_percent < selectedValue and spellName ~= "Flash of Light" and usable2 then
-								if unit == "player" then
-									box.texture:SetColorTexture(1, 1, 0, 1)
-								elseif unit == "party1" then
-									box.texture:SetColorTexture(0, 1, 1, 1)
-								elseif unit == "party2" then
-									box.texture:SetColorTexture(0.5, 0.5, 0.5, 1)
-								elseif unit == "party3" then
-									box.texture:SetColorTexture(0.5, 0, 0.5, 1)
-								elseif unit == "party4" then
-									box.texture:SetColorTexture(0.5, 0.5, 0, 1)
+							else
+								local spellName = GetSpellInfo("Flash of Light")
+								if IsSpellKnown(spellName) then
+									local usable2, nomana2 = IsUsableSpell("Flash of Light")
+									if spellName ~= "Flash of Light" and usable2 then
+										if unit == "player" then
+											box.texture:SetColorTexture(1, 1, 0, 1)
+										elseif unit == "party1" then
+											box.texture:SetColorTexture(0, 1, 1, 1)
+										elseif unit == "party2" then
+											box.texture:SetColorTexture(0.5, 0.5, 0.5, 1)
+										elseif unit == "party3" then
+											box.texture:SetColorTexture(0.5, 0, 0.5, 1)
+										elseif unit == "party4" then
+											box.texture:SetColorTexture(0.5, 0.5, 0, 1)
+										end
+									end
 								end
 							end
 						end

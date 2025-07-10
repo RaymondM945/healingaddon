@@ -243,8 +243,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 						currentlowesthp = Their_hp_percent
 
 						if Their_hp_percent < selectedValue then
-							if canholylight then
-								print(holylightpercent)
+							if canholylight and Their_hp_percent <= tonumber(holylightpercent) then
 								local usable, nomana = IsUsableSpell("Holy Light")
 								if spellName ~= "Holy Light" and usable then
 									if unit == "player" then

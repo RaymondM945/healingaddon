@@ -243,7 +243,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 						currentlowesthp = Their_hp_percent
 
 						if Their_hp_percent < selectedValue then
-							if canholylight and Their_hp_percent <= tonumber(holylightpercent) then
+							if canholylight and Their_hp_percent <= (tonumber(holylightpercent) or 0) then
 								local usable, nomana = IsUsableSpell("Holy Light")
 								if spellName ~= "Holy Light" and usable then
 									if unit == "player" then
@@ -259,10 +259,10 @@ f:SetScript("OnUpdate", function(self, elapsed)
 									end
 								end
 							else
-								local spellName = GetSpellInfo("Flash of Light")
-								if IsSpellKnown(spellName) then
+								local flashName = GetSpellInfo("Flash of Light")
+								if flashName and IsSpellKnown(flashName) then
 									local usable2, nomana2 = IsUsableSpell("Flash of Light")
-									if spellName ~= "Flash of Light" and usable2 then
+									if spellName ~= flashName and usable2 then
 										if unit == "player" then
 											box.texture:SetColorTexture(1, 1, 0, 1)
 										elseif unit == "party1" then

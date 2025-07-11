@@ -220,7 +220,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				print("You are auto-attacking.")
 			end
 		end
-		for i = 0, GetNumGroupMembers() do
+		for i = 0, 4 do
 			local unit
 			if i == 0 then
 				unit = "player"
@@ -234,7 +234,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				local maxHp = UnitHealthMax(unit)
 				local Their_hp_percent = hp / maxHp * 100
 				local _, class = UnitClass("player")
-
+				print(unit)
 				if class == "PALADIN" then
 					local spellName = UnitCastingInfo("player")
 

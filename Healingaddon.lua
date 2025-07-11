@@ -234,7 +234,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 				local maxHp = UnitHealthMax(unit)
 				local Their_hp_percent = hp / maxHp * 100
 				local _, class = UnitClass("player")
-				print(unit)
+
 				if class == "PALADIN" then
 					local spellName = UnitCastingInfo("player")
 
@@ -246,6 +246,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 							if canholylight and Their_hp_percent <= (tonumber(holylightpercent) or 0) then
 								local usable, nomana = IsUsableSpell("Holy Light")
 								if spellName ~= "Holy Light" and usable then
+									print(unit)
 									if unit == "player" then
 										box.texture:SetColorTexture(1, 0, 0, 1)
 									elseif unit == "party1" then
@@ -260,7 +261,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 								end
 							else
 								local flashName = GetSpellInfo("Flash of Light")
-								if flashName and IsSpellKnown(flashName) then
+								if flashName then
 									local usable2, nomana2 = IsUsableSpell("Flash of Light")
 									if spellName ~= flashName and usable2 then
 										if unit == "player" then

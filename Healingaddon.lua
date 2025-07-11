@@ -209,7 +209,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 			box.texture:SetColorTexture(0.5, 0.5, 1, 1)
 
 			local sametarget = UnitIsUnit("target", playerincombat .. "target")
-			if not followTarget and canFollow then
+			if false then
 				box.texture:SetColorTexture(0, 0.5, 0.5, 1)
 			elseif not (IsCurrentSpell("Attack")) and canAttack then
 				print("You are not auto-attacking.")
